@@ -1,0 +1,23 @@
+﻿.size-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+.size-btn {
+  width: 52px;
+  height: 40px;
+  border: 1px solid var(--color-gray-mid);
+  background: var(--color-white);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  font-family: var(--font-family);
+}
+.size-btn:hover:not(.disabled) { border-color: var(--color-black); }
+.size-btn.selected { background: var(--color-black); color: var(--color-white); border-color: var(--color-black); }
+.size-btn.disabled {
+  color: var(--color-gray-mid);
+  cursor: not-allowed;
+  text-decoration: line-through;
+}

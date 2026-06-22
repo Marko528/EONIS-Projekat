@@ -1,0 +1,6 @@
+﻿.order-success { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.success-box { text-align: center; max-width: 480px; padding: var(--space-8); }
+.success-icon { color: var(--color-black); margin-bottom: var(--space-4); }
+.success-box h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: var(--space-3); }
+.order-number { font-size: 14px; color: var(--color-gray-text); margin-bottom: var(--space-2); }
+.success-msg { font-size: 13px; color: var(--color-gray-text); line-height: 1.7; margin-bottom: var(--space-6); }

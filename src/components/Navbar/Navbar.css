@@ -1,0 +1,108 @@
+﻿.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--navbar-height);
+  background: var(--color-white);
+  transition: border-bottom 0.2s ease;
+}
+.navbar.scrolled {
+  border-bottom: 1px solid var(--color-gray-mid);
+}
+.navbar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navbar-logo {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--color-black);
+}
+.navbar-links {
+  display: flex;
+  gap: var(--space-6);
+}
+.navbar-links a {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-black);
+  transition: color 0.2s;
+}
+.navbar-links a:hover { color: var(--color-gray-text); }
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.navbar-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-size: 9px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.navbar-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+.navbar-hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--color-black);
+  transition: transform 0.3s ease;
+}
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-gray-mid);
+  padding: var(--space-4);
+  z-index: 999;
+}
+.mobile-menu.open { display: flex; flex-direction: column; gap: var(--space-3); }
+.mobile-menu a {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+@media (max-width: 768px) {
+  .navbar-links { display: none; }
+  .navbar-hamburger { display: flex; }
+}
