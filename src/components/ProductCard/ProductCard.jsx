@@ -12,7 +12,7 @@ export default function ProductCard({ product }) {
     addToCart({
       productId: product.id,
       productName: product.name,
-      brandName: product.brand,
+      brandName: product.brand?.name ?? product.brand,
       imageUrl: product.imageUrl || product.images?.[0],
       price: product.price,
       sizeId: firstSize.id,
@@ -33,7 +33,7 @@ export default function ProductCard({ product }) {
         </button>
       </div>
       <div className="product-card-info">
-        <span className="product-card-brand">{product.brand || product.brandName}</span>
+        <span className="product-card-brand">{product.brand?.name ?? product.brand ?? product.brandName}</span>
         <span className="product-card-name">{product.name}</span>
         <span className="product-card-price">{Number(product.price).toFixed(2)} KM</span>
       </div>

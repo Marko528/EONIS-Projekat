@@ -49,7 +49,7 @@ export default function ProductDetail() {
     addToCart({
       productId: product.id,
       productName: product.name,
-      brandName: product.brand || product.brandName,
+      brandName: product.brand?.name ?? product.brand ?? product.brandName,
       imageUrl: images[0],
       price: product.price,
       sizeId: selectedSize.id,
@@ -95,8 +95,8 @@ export default function ProductDetail() {
         </div>
 
         <div className="product-info">
-          <Link to={`/products?brand=${product.brand || product.brandName}`} className="product-brand-link">
-            {product.brand || product.brandName}
+          <Link to={`/products?brand=${product.brand?.name ?? product.brand ?? product.brandName}`} className="product-brand-link">
+            {product.brand?.name ?? product.brand ?? product.brandName}
           </Link>
           <h1 className="product-name">{product.name}</h1>
           <p className="product-price">{Number(product.price).toFixed(2)} KM</p>
