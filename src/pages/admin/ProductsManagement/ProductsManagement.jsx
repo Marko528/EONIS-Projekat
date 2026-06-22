@@ -5,6 +5,7 @@ import '../Dashboard/Dashboard.css'
 
 const EMPTY_PRODUCT = { name: '', brandId: '', price: '', categoryId: '', gender: '', description: '', imageUrl: '' }
 const GENDERS = ['Muski', 'Zenski', 'Unisex']
+const EU_SIZES = [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]
 
 export default function ProductsManagement() {
   const [products, setProducts] = useState([])
@@ -17,6 +18,8 @@ export default function ProductsManagement() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState(EMPTY_PRODUCT)
+  const [sizes, setSizes] = useState([])
+  const [newSize, setNewSize] = useState({ eu: '', stock: '' })
   const [images, setImages] = useState([])
   const [newImageUrl, setNewImageUrl] = useState('')
   const [saving, setSaving] = useState(false)
@@ -42,6 +45,8 @@ export default function ProductsManagement() {
   const openCreate = () => {
     setEditing(null)
     setForm(EMPTY_PRODUCT)
+    setSizes([])
+    setNewSize({ eu: '', stock: '' })
     setImages([])
     setNewImageUrl('')
     setModalOpen(true)
@@ -58,12 +63,27 @@ export default function ProductsManagement() {
       description: p.description || '',
       imageUrl: p.imageUrl || '',
     })
+    setSizes(p.sizes?.map(s => ({ id: s.id, eu: s.eu, stock: s.stock })) || [])
+    setNewSize({ eu: '', stock: '' })
     setNewImageUrl('')
     try {
       const { data } = await adminService.getProductImages(p.id)
       setImages(data || [])
     } catch { setImages([]) }
     setModalOpen(true)
+  }
+
+  const handleAddSize = () => {
+    const eu = Number(newSize.eu)
+    const stock = Number(newSize.stock)
+    if (!eu || stock < 0) return
+    if (sizes.find(s => s.eu === eu)) return
+    setSizes(prev => [...prev, { eu, stock, _tempId: Date.now() }])
+    setNewSize({ eu: '', stock: '' })
+  }
+
+  const handleRemoveSize = (eu) => {
+    setSizes(prev => prev.filter(s => s.eu !== eu))
   }
 
   const handleAddImageUrl = () => {
@@ -74,7 +94,7 @@ export default function ProductsManagement() {
         .then(r => { setImages(prev => [...prev, r.data]); setNewImageUrl('') })
         .catch(() => {})
     } else {
-      setImages(prev => [...prev, { id: Date.now(), url }])
+      setImages(prev => [...prev, { _tempId: Date.now(), imageUrl: url }])
       setNewImageUrl('')
     }
   }
@@ -85,7 +105,7 @@ export default function ProductsManagement() {
         .then(() => setImages(prev => prev.filter(i => i.id !== img.id)))
         .catch(() => {})
     } else {
-      setImages(prev => prev.filter(i => i.id !== img.id))
+      setImages(prev => prev.filter(i => i._tempId !== img._tempId))
     }
   }
 
@@ -93,14 +113,15 @@ export default function ProductsManagement() {
     e.preventDefault()
     setSaving(true)
     try {
+      const payload = { ...form, sizes: sizes.map(s => ({ eu: s.eu, stock: s.stock })) }
       if (editing) {
-        await productService.update(editing.id, form)
+        await productService.update(editing.id, payload)
         setProducts(prev => prev.map(p => p.id === editing.id ? { ...p, ...form } : p))
       } else {
-        const { data } = await productService.create(form)
+        const { data } = await productService.create(payload)
         const productId = data.id ?? data.product?.id
         for (const img of images) {
-          await adminService.addProductImage(productId, { imageUrl: img.url })
+          await adminService.addProductImage(productId, { imageUrl: img.imageUrl })
         }
         load()
       }
@@ -113,6 +134,8 @@ export default function ProductsManagement() {
   }
 
   const totalPages = Math.ceil(total / PER_PAGE)
+
+  const availableEuSizes = EU_SIZES.filter(eu => !sizes.find(s => s.eu === eu))
 
   return (
     <div className="admin-products">
@@ -132,7 +155,7 @@ export default function ProductsManagement() {
               {products.map(p => (
                 <tr key={p.id}>
                   <td>#{p.id}</td>
-                  <td><img src={p.imageUrl || p.images?.[0] || 'https://placehold.co/40x53/F5F5F5/767676?text=MK'} alt="" style={{ width: 40, height: 53, objectFit: 'cover' }} /></td>
+                  <td><img src={p.imageUrl || 'https://placehold.co/40x53/F5F5F5/767676?text=MK'} alt="" style={{ width: 40, height: 53, objectFit: 'cover' }} /></td>
                   <td>{p.name}</td>
                   <td>{p.brand?.name ?? p.brand}</td>
                   <td>{Number(p.price).toFixed(2)} KM</td>
@@ -154,7 +177,7 @@ export default function ProductsManagement() {
 
       {modalOpen && (
         <div className="admin-modal-overlay" onClick={() => setModalOpen(false)}>
-          <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 520 }}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 540 }}>
             <h2 className="modal-title">{editing ? 'UREDI PROIZVOD' : 'NOVI PROIZVOD'}</h2>
             <form onSubmit={handleSave} className="admin-form">
 
@@ -203,12 +226,67 @@ export default function ProductsManagement() {
               </div>
 
               <div className="admin-form-group">
+                <label className="form-label">Velicine</label>
+                {sizes.length > 0 && (
+                  <table style={{ width: '100%', fontSize: 13, marginBottom: 8, borderCollapse: 'collapse' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
+                        <th style={{ textAlign: 'left', padding: '4px 8px', fontWeight: 600 }}>EU</th>
+                        <th style={{ textAlign: 'left', padding: '4px 8px', fontWeight: 600 }}>Na stanju</th>
+                        <th />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sizes.map(s => (
+                        <tr key={s.eu} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                          <td style={{ padding: '4px 8px' }}>{s.eu}</td>
+                          <td style={{ padding: '4px 8px' }}>
+                            <input
+                              type="number"
+                              min="0"
+                              value={s.stock}
+                              onChange={e => setSizes(prev => prev.map(x => x.eu === s.eu ? { ...x, stock: Number(e.target.value) } : x))}
+                              style={{ width: 70, padding: '2px 6px', fontSize: 13, border: '1px solid var(--color-border)', borderRadius: 3 }}
+                            />
+                          </td>
+                          <td style={{ padding: '4px 8px', textAlign: 'right' }}>
+                            <button type="button" onClick={() => handleRemoveSize(s.eu)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-error)', fontSize: 13 }}>Ukloni</button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <select
+                    className="form-input"
+                    style={{ flex: 1 }}
+                    value={newSize.eu}
+                    onChange={e => setNewSize(s => ({ ...s, eu: e.target.value }))}
+                  >
+                    <option value="">EU velicina</option>
+                    {availableEuSizes.map(eu => <option key={eu} value={eu}>{eu}</option>)}
+                  </select>
+                  <input
+                    className="form-input"
+                    style={{ width: 90 }}
+                    type="number"
+                    min="0"
+                    placeholder="Kolicina"
+                    value={newSize.stock}
+                    onChange={e => setNewSize(s => ({ ...s, stock: e.target.value }))}
+                  />
+                  <button type="button" className="btn-secondary" onClick={handleAddSize}>Dodaj</button>
+                </div>
+              </div>
+
+              <div className="admin-form-group">
                 <label className="form-label">Dodatne slike (opciono)</label>
                 {images.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
-                    {images.map(img => (
-                      <div key={img.id} style={{ position: 'relative' }}>
-                        <img src={img.url} alt="" style={{ width: 64, height: 85, objectFit: 'cover' }} />
+                    {images.map((img, i) => (
+                      <div key={img.id ?? img._tempId ?? i} style={{ position: 'relative' }}>
+                        <img src={img.imageUrl} alt="" style={{ width: 64, height: 85, objectFit: 'cover' }} />
                         <button
                           type="button"
                           onClick={() => handleDeleteImage(img)}

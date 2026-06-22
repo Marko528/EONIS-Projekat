@@ -19,11 +19,11 @@ export default function CartDrawer() {
         price: i.price,
       }))
       const { data } = await orderService.create({ items: orderItems })
+      clearCart()
+      setIsOpen(false)
       if (data.stripeUrl) {
         window.location.href = data.stripeUrl
       } else {
-        clearCart()
-        setIsOpen(false)
         navigate('/order-success', { state: { orderId: data.id } })
       }
     } catch (err) {

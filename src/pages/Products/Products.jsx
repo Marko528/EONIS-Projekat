@@ -51,8 +51,10 @@ export default function Products() {
         ...(filters.maxPrice && { maxPrice: filters.maxPrice }),
       }
       const { data } = await productService.getAll(params)
-      setProducts(data.products || data || [])
-      setTotal(data.total || (data.products || data || []).length)
+      const all = data.products || data || []
+      const inStock = all.filter(p => !p.sizes?.length || p.sizes.some(s => s.stock > 0))
+      setProducts(inStock)
+      setTotal(data.total || inStock.length)
     } catch {
       setProducts([])
     } finally {
