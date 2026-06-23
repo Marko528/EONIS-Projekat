@@ -42,7 +42,7 @@ export default function Orders() {
                     <span className={`order-status status-${(order.status || '').toLowerCase()}`}>
                       {STATUS_LABELS[order.status] || order.status}
                     </span>
-                    <span className="order-total">{Number(order.total || order.totalAmount).toFixed(2)} KM</span>
+                    <span className="order-total">{Number(order.total || order.totalAmount).toFixed(2)} RSD</span>
                   </div>
                   <span className="order-expand">{expanded === order.id ? '−' : '+'}</span>
                 </div>
@@ -54,7 +54,7 @@ export default function Orders() {
                         <div>
                           <p className="order-item-name">{item.productName || item.product?.name}</p>
                           <p className="order-item-meta">EU {item.sizeEU || item.size?.eu} · Kol: {item.quantity}</p>
-                          <p className="order-item-price">{Number(item.price).toFixed(2)} KM</p>
+                          <p className="order-item-price">{Number(item.price).toFixed(2)} RSD</p>
                         </div>
                       </div>
                     ))}

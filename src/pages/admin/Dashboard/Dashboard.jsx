@@ -26,7 +26,7 @@ export default function Dashboard() {
       <h1 className="admin-page-title">DASHBOARD</h1>
       <div className="stats-grid">
         {[
-          { label: 'UKUPAN PRIHOD', value: stats ? `${Number(stats.totalRevenue || 0).toFixed(2)} KM` : '—' },
+          { label: 'UKUPAN PRIHOD', value: stats ? `${Number(stats.totalRevenue || 0).toFixed(2)} RSD` : '—' },
           { label: 'BROJ PORUDZINA', value: stats?.totalOrders ?? '—' },
           { label: 'BROJ KORISNIKA', value: stats?.totalUsers ?? '—' },
           { label: 'NOVI KORISNICI (MESEC)', value: stats?.newUsersThisMonth ?? '—' },
@@ -52,7 +52,7 @@ export default function Dashboard() {
                 <td>{o.userName || o.user?.name || '—'}</td>
                 <td>{new Date(o.createdAt).toLocaleDateString('hr-HR')}</td>
                 <td><span className={`status-badge status-${(o.status||'').toLowerCase()}`}>{o.status}</span></td>
-                <td>{Number(o.total || o.totalAmount || 0).toFixed(2)} KM</td>
+                <td>{Number(o.total || o.totalAmount || 0).toFixed(2)} RSD</td>
               </tr>
             ))}
           </tbody>

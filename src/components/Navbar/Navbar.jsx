@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
@@ -6,7 +6,9 @@ import './Navbar.css'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const { isAuthenticated, isAdmin, logout } = useAuth()
   const { totalItems, setIsOpen } = useCart()
   const navigate = useNavigate()
@@ -17,21 +19,40 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
-  const handleLogout = () => { logout(); navigate('/') }
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [drawerOpen])
+
+  const close = () => setDrawerOpen(false)
+  const handleLogout = () => { logout(); navigate('/'); close() }
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    const q = searchQuery.trim()
+    if (!q) return
+    setSearchOpen(false)
+    setSearchQuery('')
+    navigate(`/products?search=${encodeURIComponent(q)}`)
+  }
 
   return (
     <>
       <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
         <div className="navbar-inner">
-          <Link to="/" className="navbar-logo">MK DR1P</Link>
-          <div className="navbar-links">
-            <Link to="/products?gender=Muski">MUSKI</Link>
-            <Link to="/products?gender=Zenski">ZENSKI</Link>
-            <Link to="/products">BRENDOVI</Link>
-            <Link to="/products?sort=newest">NOVO</Link>
+
+          <div className="navbar-left">
+            <button className="navbar-hamburger" onClick={() => setDrawerOpen(true)} aria-label="Meni">
+              <span /><span /><span />
+            </button>
           </div>
-          <div className="navbar-actions">
-            <button className="navbar-icon-btn" onClick={() => navigate('/products')} title="Pretraga">
+
+          <Link to="/" className="navbar-logo">
+            <span className="navbar-logo-text">MK DR1P</span>
+          </Link>
+
+          <div className="navbar-right">
+            <button className="navbar-icon-btn" onClick={() => setSearchOpen(true)} title="Pretraga">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
               </svg>
@@ -43,7 +64,7 @@ export default function Navbar() {
                 </svg>
               </button>
             )}
-            <button className="navbar-icon-btn" onClick={() => setIsOpen(true)} title="Korpa">
+            <button className="navbar-icon-btn" onClick={() => setIsOpen(true)} title="Korpa" style={{ position: 'relative' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
               </svg>
@@ -63,11 +84,6 @@ export default function Navbar() {
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                   </svg>
                 </button>
-                <button className="navbar-icon-btn" onClick={handleLogout} title="Odjava">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
-                  </svg>
-                </button>
               </>
             ) : (
               <button className="navbar-icon-btn" onClick={() => navigate('/login')} title="Prijava">
@@ -76,20 +92,70 @@ export default function Navbar() {
                 </svg>
               </button>
             )}
-            <button className="navbar-hamburger" onClick={() => setMobileOpen(p => !p)}>
-              <span/><span/><span/>
-            </button>
           </div>
         </div>
       </nav>
-      <div className={`mobile-menu${mobileOpen ? ' open' : ''}`}>
-        <Link to="/products?gender=Muski" onClick={() => setMobileOpen(false)}>MUSKI</Link>
-        <Link to="/products?gender=Zenski" onClick={() => setMobileOpen(false)}>ZENSKI</Link>
-        <Link to="/products" onClick={() => setMobileOpen(false)}>BRENDOVI</Link>
-        <Link to="/products?sort=newest" onClick={() => setMobileOpen(false)}>NOVO</Link>
-        {isAuthenticated && <Link to="/orders" onClick={() => setMobileOpen(false)}>PORUDZINE</Link>}
-        {!isAuthenticated && <Link to="/login" onClick={() => setMobileOpen(false)}>PRIJAVA</Link>}
+
+      {/* Search overlay */}
+      <div className={`search-overlay${searchOpen ? ' open' : ''}`} onClick={() => setSearchOpen(false)}>
+        <form className="search-box" onClick={e => e.stopPropagation()} onSubmit={handleSearch}>
+          <input
+            autoFocus
+            placeholder="Pretraži proizvode..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            onKeyDown={e => e.key === 'Escape' && setSearchOpen(false)}
+          />
+          <button type="submit" title="Pretraži">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+        </form>
       </div>
+
+      {/* Drawer overlay */}
+      <div className={`drawer-overlay${drawerOpen ? ' open' : ''}`} onClick={close} />
+
+      {/* Side Drawer */}
+      <aside className={`side-drawer${drawerOpen ? ' open' : ''}`}>
+        <div className="drawer-header">
+          <Link to="/" className="navbar-logo" onClick={close}>
+            <span className="navbar-logo-text">MK DR1P</span>
+          </Link>
+          <button className="drawer-close" onClick={close} aria-label="Zatvori">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <nav className="drawer-nav">
+          <Link to="/products?gender=Muski" onClick={close}>MUSKI</Link>
+          <Link to="/products?gender=Zenski" onClick={close}>ZENSKI</Link>
+          <Link to="/products" onClick={close}>BRENDOVI</Link>
+          <Link to="/products?sort=newest" onClick={close}>NOVO</Link>
+        </nav>
+
+        <div className="drawer-divider" />
+
+        <nav className="drawer-secondary">
+          {isAuthenticated ? (
+            <>
+              <Link to="/profile" onClick={close}>PROFIL</Link>
+              <Link to="/orders" onClick={close}>PORUDZINE</Link>
+              <Link to="/wishlist" onClick={close}>WISHLIST</Link>
+              {isAdmin && <Link to="/admin/dashboard" onClick={close}>ADMIN</Link>}
+              <button onClick={handleLogout}>ODJAVA</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" onClick={close}>PRIJAVA</Link>
+              <Link to="/register" onClick={close}>REGISTRACIJA</Link>
+            </>
+          )}
+        </nav>
+      </aside>
     </>
   )
 }

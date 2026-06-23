@@ -48,7 +48,7 @@ export default function OrdersManagement() {
                   <td>#{o.id}</td>
                   <td>{o.userName || o.user?.name || '—'}</td>
                   <td>{new Date(o.createdAt).toLocaleDateString('hr-HR')}</td>
-                  <td>{Number(o.total || o.totalAmount || 0).toFixed(2)} KM</td>
+                  <td>{Number(o.total || o.totalAmount || 0).toFixed(2)} RSD</td>
                   <td>
                     <select
                       className="status-select"

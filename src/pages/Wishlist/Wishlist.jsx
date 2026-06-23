@@ -42,9 +42,9 @@ export default function Wishlist() {
                     <img src={p.imageUrl || p.images?.[0] || 'https://placehold.co/300x400/F5F5F5/767676?text=MK'} alt={p.name} />
                   </Link>
                   <div className="wishlist-card-info">
-                    <span className="brand">{p.brand || p.brandName}</span>
+                    <span className="brand">{p.brand?.name ?? p.brand ?? p.brandName}</span>
                     <span className="name">{p.name}</span>
-                    <span className="price">{Number(p.price).toFixed(2)} KM</span>
+                    <span className="price">{Number(p.price).toFixed(2)} RSD</span>
                     <button className="remove-btn" onClick={() => remove(pid)}>UKLONI</button>
                   </div>
                 </div>

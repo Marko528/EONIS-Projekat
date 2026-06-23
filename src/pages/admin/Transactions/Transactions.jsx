@@ -32,7 +32,7 @@ export default function Transactions() {
                   <td>{new Date(t.createdAt || t.date).toLocaleDateString('hr-HR')}</td>
                   <td>{t.customerName || t.customer || '—'}</td>
                   <td>{t.products || t.itemCount || '—'}</td>
-                  <td>{Number(t.amount || 0).toFixed(2)} KM</td>
+                  <td>{Number(t.amount || 0).toFixed(2)} RSD</td>
                   <td><code style={{fontSize:11}}>{t.stripeId || t.stripe_id || '—'}</code></td>
                 </tr>
               ))}

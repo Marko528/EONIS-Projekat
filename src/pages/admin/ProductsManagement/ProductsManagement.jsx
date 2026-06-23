@@ -4,7 +4,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner'
 import '../Dashboard/Dashboard.css'
 
 const EMPTY_PRODUCT = { name: '', brandId: '', price: '', categoryId: '', gender: '', description: '', imageUrl: '' }
-const GENDERS = ['Muski', 'Zenski', 'Unisex']
+const GENDERS = ['Muski', 'Zenski']
 const EU_SIZES = [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]
 
 export default function ProductsManagement() {
@@ -158,7 +158,7 @@ export default function ProductsManagement() {
                   <td><img src={p.imageUrl || 'https://placehold.co/40x53/F5F5F5/767676?text=MK'} alt="" style={{ width: 40, height: 53, objectFit: 'cover' }} /></td>
                   <td>{p.name}</td>
                   <td>{p.brand?.name ?? p.brand}</td>
-                  <td>{Number(p.price).toFixed(2)} KM</td>
+                  <td>{Number(p.price).toFixed(2)} RSD</td>
                   <td>
                     <button className="admin-action-btn" onClick={() => openEdit(p)}>Uredi</button>
                     <button className="admin-action-btn danger" onClick={() => setDeleteConfirm(p.id)}>Obrisi</button>

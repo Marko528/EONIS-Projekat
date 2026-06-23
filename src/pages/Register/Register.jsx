@@ -5,7 +5,7 @@ import { authService } from '../../services/authService'
 import './Register.css'
 
 export default function Register() {
-  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', confirm: '' })
   const [errors, setErrors] = useState({})
   const [serverError, setServerError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -14,7 +14,8 @@ export default function Register() {
 
   const validate = () => {
     const e = {}
-    if (!form.name.trim()) e.name = 'Ime je obavezno.'
+    if (!form.firstName.trim()) e.firstName = 'Ime je obavezno.'
+    if (!form.lastName.trim()) e.lastName = 'Prezime je obavezno.'
     if (!form.email) e.email = 'Email je obavezan.'
     else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = 'Neispravan email.'
     if (!form.password) e.password = 'Lozinka je obavezna.'
@@ -30,7 +31,8 @@ export default function Register() {
     setLoading(true)
     setServerError('')
     try {
-      await authService.register({ name: form.name, email: form.email, password: form.password })
+      const name = `${form.firstName.trim()} ${form.lastName.trim()}`
+      await authService.register({ name, email: form.email, password: form.password })
       await login(form.email, form.password)
       navigate('/')
     } catch (err) {
@@ -46,8 +48,19 @@ export default function Register() {
         <Link to="/" className="auth-logo">MK DR1P</Link>
         <h1 className="auth-title">REGISTRACIJA</h1>
         <form className="auth-form" onSubmit={handleSubmit}>
+
+          <div className="form-row">
+            <div className="form-group">
+              <input className={`form-input${errors.firstName ? ' error' : ''}`} type="text" placeholder="Ime" {...f('firstName')} />
+              {errors.firstName && <p className="error-text">{errors.firstName}</p>}
+            </div>
+            <div className="form-group">
+              <input className={`form-input${errors.lastName ? ' error' : ''}`} type="text" placeholder="Prezime" {...f('lastName')} />
+              {errors.lastName && <p className="error-text">{errors.lastName}</p>}
+            </div>
+          </div>
+
           {[
-            { key: 'name', type: 'text', placeholder: 'Ime i prezime' },
             { key: 'email', type: 'email', placeholder: 'Email adresa' },
             { key: 'password', type: 'password', placeholder: 'Lozinka' },
             { key: 'confirm', type: 'password', placeholder: 'Potvrdite lozinku' },
@@ -57,6 +70,7 @@ export default function Register() {
               {errors[key] && <p className="error-text">{errors[key]}</p>}
             </div>
           ))}
+
           {serverError && <p className="error-text server-error">{serverError}</p>}
           <button type="submit" className="btn-primary auth-submit" disabled={loading}>
             {loading ? 'UCITAVANJE...' : 'REGISTRACIJA'}

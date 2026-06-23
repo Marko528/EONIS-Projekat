@@ -99,7 +99,7 @@ export default function ProductDetail() {
             {product.brand?.name ?? product.brand ?? product.brandName}
           </Link>
           <h1 className="product-name">{product.name}</h1>
-          <p className="product-price">{Number(product.price).toFixed(2)} KM</p>
+          <p className="product-price">{Number(product.price).toFixed(2)} RSD</p>
           <hr className="product-divider" />
 
           <p className="size-label">IZABERITE VELICINU:</p>
@@ -131,7 +131,7 @@ export default function ProductDetail() {
               </button>
               {accordion === 'ship' && (
                 <div className="accordion-body">
-                  <p>Besplatna dostava za porudzine iznad 100 KM.</p>
+                  <p>Besplatna dostava za porudzine iznad 5000 RSD.</p>
                   <p>Povrat unutar 30 dana od kupovine.</p>
                 </div>
               )}

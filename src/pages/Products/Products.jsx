@@ -7,7 +7,7 @@ import { productService } from '../../services/productService'
 import './Products.css'
 
 const CATEGORIES = ['Lifestyle', 'Running', 'Basketball', 'Skateboarding']
-const GENDERS = ['Muski', 'Zenski', 'Unisex']
+const GENDERS = ['Muski', 'Zenski']
 const EU_SIZES = [38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
 const BRANDS = ['Nike', 'Adidas', 'New Balance', 'Jordan', 'Puma', 'Converse', 'Vans', 'Reebok']
 const SORT_OPTIONS = [
@@ -31,6 +31,7 @@ export default function Products() {
     sizes: [],
     minPrice: '',
     maxPrice: '',
+    search: searchParams.get('search') || '',
   })
   const [sort, setSort] = useState(searchParams.get('sort') || 'newest')
   const [page, setPage] = useState(1)
@@ -49,6 +50,7 @@ export default function Products() {
         ...(filters.sizes.length && { sizes: filters.sizes.join(',') }),
         ...(filters.minPrice && { minPrice: filters.minPrice }),
         ...(filters.maxPrice && { maxPrice: filters.maxPrice }),
+        ...(filters.search && { search: filters.search }),
       }
       const { data } = await productService.getAll(params)
       const all = data.products || data || []
@@ -61,6 +63,12 @@ export default function Products() {
       setLoading(false)
     }
   }, [page, sort, filters])
+
+  useEffect(() => {
+    const s = searchParams.get('search') || ''
+    setFilters(f => ({ ...f, search: s }))
+    setPage(1)
+  }, [searchParams.get('search')])
 
   useEffect(() => { load() }, [load])
 

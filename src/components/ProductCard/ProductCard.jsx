@@ -35,7 +35,7 @@ export default function ProductCard({ product }) {
       <div className="product-card-info">
         <span className="product-card-brand">{product.brand?.name ?? product.brand ?? product.brandName}</span>
         <span className="product-card-name">{product.name}</span>
-        <span className="product-card-price">{Number(product.price).toFixed(2)} KM</span>
+        <span className="product-card-price">{Number(product.price).toFixed(2)} RSD</span>
       </div>
     </Link>
   )

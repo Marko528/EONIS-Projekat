@@ -60,7 +60,7 @@ export default function CartDrawer() {
                       <span>{item.quantity}</span>
                       <button onClick={() => updateQuantity(item.productId, item.sizeId, item.quantity + 1)}>+</button>
                     </div>
-                    <span className="cart-item-price">{(item.price * item.quantity).toFixed(2)} KM</span>
+                    <span className="cart-item-price">{(item.price * item.quantity).toFixed(2)} RSD</span>
                     <button className="cart-remove-btn" onClick={() => removeFromCart(item.productId, item.sizeId)}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -76,7 +76,7 @@ export default function CartDrawer() {
           <div className="cart-drawer-footer">
             <div className="cart-total">
               <span>UKUPNO</span>
-              <span>{totalPrice.toFixed(2)} KM</span>
+              <span>{totalPrice.toFixed(2)} RSD</span>
             </div>
             <button className="btn-primary cart-checkout-btn" onClick={handleCheckout}>
               NASTAVI NA PLACANJE

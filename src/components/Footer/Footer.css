@@ -1,7 +1,7 @@
 ﻿.footer {
   background: var(--color-black);
   color: var(--color-white);
-  margin-top: var(--space-12);
+  margin-top: 56px;
 }
 .footer-inner {
   display: grid;
