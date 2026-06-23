@@ -36,14 +36,14 @@
 
 .brand-card-name {
   position: absolute;
-  bottom: 20px;
+  bottom: 24px;
   left: 0;
   right: 0;
   text-align: center;
   color: var(--color-white);
-  font-size: 13px;
+  font-size: 22px;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 

@@ -8,7 +8,7 @@ const BRANDS = [
   },
   {
     name: 'Adidas',
-    image: 'https://images.unsplash.com/photo-1608231387042-66d1773d3028?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1691067951700-138ca8f4841f?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'New Balance',
@@ -16,11 +16,11 @@ const BRANDS = [
   },
   {
     name: 'Jordan',
-    image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Puma',
-    image: 'https://images.unsplash.com/photo-1608231387042-66d1773d3028?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1680204101400-aeac783c9d87?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Converse',
@@ -32,7 +32,7 @@ const BRANDS = [
   },
   {
     name: 'Reebok',
-    image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1673557475656-d580caccefa0?auto=format&fit=crop&w=800&q=80',
   },
 ]
 

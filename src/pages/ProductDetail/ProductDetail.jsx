@@ -104,7 +104,10 @@ export default function ProductDetail() {
 
           <p className="size-label">IZABERITE VELIČINU:</p>
           <SizeSelector
-            sizes={[...(product.sizes || [])].sort((a, b) => Number(a.eu) - Number(b.eu))}
+            sizes={[36,37,38,39,40,41,42,43,44,45,46,47,48].map(eu => {
+              const found = product.sizes?.find(s => Number(s.eu) === eu)
+              return found ? found : { id: null, eu: String(eu), stock: 0 }
+            })}
             selected={selectedSize?.id}
             onSelect={(s) => { setSelectedSize(s); setSizeError(false) }}
           />
