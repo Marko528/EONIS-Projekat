@@ -36,7 +36,7 @@ export default function Register() {
       await login(form.email, form.password)
       navigate('/')
     } catch (err) {
-      setServerError(err.response?.data?.message || 'Greska pri registraciji.')
+      setServerError(err.response?.data?.message || 'Greška pri registraciji.')
     } finally { setLoading(false) }
   }
 
@@ -73,7 +73,7 @@ export default function Register() {
 
           {serverError && <p className="error-text server-error">{serverError}</p>}
           <button type="submit" className="btn-primary auth-submit" disabled={loading}>
-            {loading ? 'UCITAVANJE...' : 'REGISTRACIJA'}
+            {loading ? 'UČITAVANJE...' : 'REGISTRACIJA'}
           </button>
         </form>
         <p className="auth-switch">Imate nalog? <Link to="/login">Prijavite se</Link></p>

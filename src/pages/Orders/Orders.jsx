@@ -26,9 +26,9 @@ export default function Orders() {
   return (
     <div className="orders-page page-wrapper">
       <div className="container">
-        <h1 className="page-heading">MOJE PORUDZINE</h1>
+        <h1 className="page-heading">MOJE PORUDŽBINE</h1>
         {loading ? <LoadingSpinner /> : orders.length === 0 ? (
-          <p className="no-orders">Nemate jos nijednu porudzinu.</p>
+          <p className="no-orders">Nemate jos nijednu porudžbinu.</p>
         ) : (
           <div className="orders-list">
             {orders.map(order => (

@@ -11,14 +11,14 @@ export default function Footer() {
         </div>
         <div className="footer-col">
           <h4>SHOP</h4>
-          <Link to="/products?gender=Muski">Muski</Link>
-          <Link to="/products?gender=Zenski">Zenski</Link>
+          <Link to="/products?gender=Muški">Muški</Link>
+          <Link to="/products?gender=Ženski">Ženski</Link>
           <Link to="/products">Svi proizvodi</Link>
         </div>
         <div className="footer-col">
           <h4>NALOG</h4>
           <Link to="/profile">Profil</Link>
-          <Link to="/orders">Porudzine</Link>
+          <Link to="/orders">Porudžbine</Link>
           <Link to="/wishlist">Wishlist</Link>
         </div>
         <div className="footer-col">

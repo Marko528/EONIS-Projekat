@@ -62,7 +62,7 @@ export default function ProductDetail() {
     try {
       await wishlistService.add(product.id)
       setWishlistMsg('Dodano u wishlist!')
-    } catch { setWishlistMsg('Greska pri dodavanju.') }
+    } catch { setWishlistMsg('Greška pri dodavanju.') }
     setTimeout(() => setWishlistMsg(''), 3000)
   }
 
@@ -75,7 +75,7 @@ export default function ProductDetail() {
       setReviews(prev => [data, ...prev])
       setReview({ rating: 5, comment: '' })
       setReviewError('')
-    } catch { setReviewError('Greska pri slanju recenzije.') }
+    } catch { setReviewError('Greška pri slanju recenzije.') }
   }
 
   return (
@@ -102,13 +102,13 @@ export default function ProductDetail() {
           <p className="product-price">{Number(product.price).toFixed(2)} RSD</p>
           <hr className="product-divider" />
 
-          <p className="size-label">IZABERITE VELICINU:</p>
+          <p className="size-label">IZABERITE VELIČINU:</p>
           <SizeSelector
-            sizes={product.sizes || []}
+            sizes={[...(product.sizes || [])].sort((a, b) => Number(a.eu) - Number(b.eu))}
             selected={selectedSize?.id}
             onSelect={(s) => { setSelectedSize(s); setSizeError(false) }}
           />
-          {sizeError && <p className="error-text">Molimo izaberite velicinu.</p>}
+          {sizeError && <p className="error-text">Molimo izaberite veličinu.</p>}
 
           <div className="product-actions">
             <button className="btn-primary product-cta" onClick={handleAddToCart}>DODAJ U KORPU</button>
@@ -131,7 +131,7 @@ export default function ProductDetail() {
               </button>
               {accordion === 'ship' && (
                 <div className="accordion-body">
-                  <p>Besplatna dostava za porudzine iznad 5000 RSD.</p>
+                  <p>Besplatna dostava za porudžbine iznad 5000 RSD.</p>
                   <p>Povrat unutar 30 dana od kupovine.</p>
                 </div>
               )}
@@ -151,13 +151,13 @@ export default function ProductDetail() {
           </div>
           <textarea
             className="review-textarea"
-            placeholder="Vas komentar..."
+            placeholder="Vaš komentar..."
             value={review.comment}
             onChange={e => setReview(r => ({ ...r, comment: e.target.value }))}
             rows={3}
           />
           {reviewError && <p className="error-text">{reviewError}</p>}
-          <button type="submit" className="btn-primary">POSALJI RECENZIJU</button>
+          <button type="submit" className="btn-primary">POŠALJI RECENZIJU</button>
         </form>
 
         <div className="reviews-list">

@@ -13,8 +13,8 @@ export default function Profile() {
     e.preventDefault()
     try {
       await authService.updateProfile(form)
-      setMsg('Podaci uspjesno azurirani!')
-    } catch { setMsg('Greska pri azuriranju.') }
+      setMsg('Podaci uspješno ažurirani!')
+    } catch { setMsg('Greška pri ažuriranju.') }
     setTimeout(() => setMsg(''), 3000)
   }
 
@@ -25,7 +25,7 @@ export default function Profile() {
         <div className="profile-layout">
 
           <div className="profile-form-section">
-            <h2 className="section-heading">LICNI PODACI</h2>
+            <h2 className="section-heading">LIČNI PODACI</h2>
             <form className="profile-form" onSubmit={handleUpdate}>
               <div className="form-group">
                 <label className="form-label">IME I PREZIME</label>
@@ -36,12 +36,12 @@ export default function Profile() {
                 <input className="form-input" type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
               </div>
               {msg && <p className="update-msg">{msg}</p>}
-              <button type="submit" className="btn-primary profile-save-btn">SACUVAJ PROMJENE</button>
+              <button type="submit" className="btn-primary profile-save-btn">SAČUVAJ PROMJENE</button>
             </form>
           </div>
 
           <div className="profile-sidebar">
-            <Link to="/orders" className="profile-link-btn btn-secondary">MOJE PORUDZINE</Link>
+            <Link to="/orders" className="profile-link-btn btn-secondary">MOJE PORUDŽBINE</Link>
             <Link to="/wishlist" className="profile-link-btn btn-secondary">WISHLIST</Link>
           </div>
 

@@ -27,7 +27,7 @@ export default function CartDrawer() {
         navigate('/order-success', { state: { orderId: data.id } })
       }
     } catch (err) {
-      alert('Greska pri kreiranju porudzine. Pokusajte ponovo.')
+      alert(err.response?.data?.message || 'Greška pri kreiranju porudžbine. Pokušajte ponovo.')
     }
   }
 
@@ -53,7 +53,7 @@ export default function CartDrawer() {
                 <div className="cart-item-info">
                   <span className="cart-item-brand">{item.brandName}</span>
                   <span className="cart-item-name">{item.productName}</span>
-                  <span className="cart-item-size">Velicina: EU {item.sizeEU}</span>
+                  <span className="cart-item-size">Veličina: EU {item.sizeEU}</span>
                   <div className="cart-item-controls">
                     <div className="qty-controls">
                       <button onClick={() => updateQuantity(item.productId, item.sizeId, item.quantity - 1)}>-</button>

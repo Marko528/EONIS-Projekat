@@ -28,7 +28,7 @@ export default function Wishlist() {
         <h1 className="page-heading">WISHLIST</h1>
         {loading ? <LoadingSpinner /> : items.length === 0 ? (
           <div className="empty-state">
-            <p>Vas wishlist je prazan.</p>
+            <p>Vaš wishlist je prazan.</p>
             <Link to="/products" className="btn-primary">PREGLEDAJ PROIZVODE</Link>
           </div>
         ) : (

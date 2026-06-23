@@ -30,7 +30,7 @@ export default function OrdersManagement() {
   return (
     <div>
       <div className="admin-toolbar">
-        <h1 className="admin-page-title">PORUDZINE</h1>
+        <h1 className="admin-page-title">PORUDŽBINE</h1>
         <select className="sort-select" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(1) }}>
           <option value="">Svi statusi</option>
           {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -42,7 +42,7 @@ export default function OrdersManagement() {
             <thead><tr><th>ID</th><th>KUPAC</th><th>DATUM</th><th>IZNOS</th><th>STATUS</th></tr></thead>
             <tbody>
               {orders.length === 0 ? (
-                <tr><td colSpan={5} className="table-empty">Nema porudzina.</td></tr>
+                <tr><td colSpan={5} className="table-empty">Nema porudžbina.</td></tr>
               ) : orders.map(o => (
                 <tr key={o.id}>
                   <td>#{o.id}</td>

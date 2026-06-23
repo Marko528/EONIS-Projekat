@@ -13,6 +13,7 @@ import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
 import Wishlist from './pages/Wishlist/Wishlist'
 import Profile from './pages/Profile/Profile'
+import Brands from './pages/Brands/Brands'
 import Orders from './pages/Orders/Orders'
 import OrderSuccess from './pages/OrderSuccess/OrderSuccess'
 import AdminLayout from './pages/admin/AdminLayout'
@@ -32,6 +33,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/brands" element={<Brands />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

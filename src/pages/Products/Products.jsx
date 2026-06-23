@@ -7,8 +7,8 @@ import { productService } from '../../services/productService'
 import './Products.css'
 
 const CATEGORIES = ['Lifestyle', 'Running', 'Basketball', 'Skateboarding']
-const GENDERS = ['Muski', 'Zenski']
-const EU_SIZES = [38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+const GENDERS = ['Muški', 'Ženski']
+const EU_SIZES = [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]
 const BRANDS = ['Nike', 'Adidas', 'New Balance', 'Jordan', 'Puma', 'Converse', 'Vans', 'Reebok']
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Najnovije' },
@@ -54,9 +54,8 @@ export default function Products() {
       }
       const { data } = await productService.getAll(params)
       const all = data.products || data || []
-      const inStock = all.filter(p => !p.sizes?.length || p.sizes.some(s => s.stock > 0))
-      setProducts(inStock)
-      setTotal(data.total || inStock.length)
+      setProducts(all)
+      setTotal(data.total || all.length)
     } catch {
       setProducts([])
     } finally {
@@ -132,7 +131,7 @@ export default function Products() {
           </div>
 
           <div className="filter-group">
-            <h4 className="filter-label">VELICINA (EU)</h4>
+            <h4 className="filter-label">VELIČINA (EU)</h4>
             <div className="size-filter-grid">
               {EU_SIZES.map(s => (
                 <button key={s} className={`size-filter-btn${filters.sizes.includes(s) ? ' active' : ''}`} onClick={() => toggleSize(s)}>
@@ -143,7 +142,7 @@ export default function Products() {
           </div>
 
           <div className="filter-group">
-            <h4 className="filter-label">CENA (KM)</h4>
+            <h4 className="filter-label">CENA (RSD)</h4>
             <div className="price-range">
               <input className="form-input" type="number" placeholder="Min" value={filters.minPrice} onChange={e => setFilters(f => ({ ...f, minPrice: e.target.value }))} />
               <span>—</span>
@@ -153,7 +152,7 @@ export default function Products() {
 
           <div className="filter-actions">
             <button className="btn-primary" onClick={() => { setPage(1); setFiltersOpen(false) }}>PRIMENI FILTERE</button>
-            <button className="btn-secondary" onClick={clearFilters}>OCISTI</button>
+            <button className="btn-secondary" onClick={clearFilters}>OČISTI</button>
           </div>
         </aside>
 

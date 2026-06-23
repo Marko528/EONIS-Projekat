@@ -20,8 +20,8 @@ export default function OrderSuccess() {
           </svg>
         </div>
         <h1>HVALA NA KUPOVINI!</h1>
-        {orderId && <p className="order-number">Broj porudzine: <strong>#{orderId}</strong></p>}
-        <p className="success-msg">Vasa porudzina je uspjesno primljena. Ocekujte email potvrdu.</p>
+        {orderId && <p className="order-number">Broj porudžbine: <strong>#{orderId}</strong></p>}
+        <p className="success-msg">Vaša porudžbina je uspješno primljena. Očekujte email potvrdu.</p>
         <Link to="/products" className="btn-primary">NASTAVI SA KUPOVINOM</Link>
       </div>
     </div>

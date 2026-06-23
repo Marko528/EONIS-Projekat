@@ -4,7 +4,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner'
 import '../Dashboard/Dashboard.css'
 
 const EMPTY_PRODUCT = { name: '', brandId: '', price: '', categoryId: '', gender: '', description: '', imageUrl: '' }
-const GENDERS = ['Muski', 'Zenski']
+const GENDERS = ['Muški', 'Ženski']
 const EU_SIZES = [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]
 
 export default function ProductsManagement() {
@@ -54,36 +54,42 @@ export default function ProductsManagement() {
 
   const openEdit = async (p) => {
     setEditing(p)
-    setForm({
-      name: p.name,
-      brandId: p.brand?.id ?? p.brandId ?? '',
-      price: p.price,
-      categoryId: p.category?.id ?? p.categoryId ?? '',
-      gender: p.gender?.name ?? p.gender ?? '',
-      description: p.description || '',
-      imageUrl: p.imageUrl || '',
-    })
-    setSizes(p.sizes?.map(s => ({ id: s.id, eu: s.eu, stock: s.stock })) || [])
+    setForm({ name: '', brandId: '', price: '', categoryId: '', gender: '', description: '', imageUrl: '' })
+    setSizes([])
     setNewSize({ eu: '', stock: '' })
     setNewImageUrl('')
+    setImages([])
+    setModalOpen(true)
+    try {
+      const { data: detail } = await productService.getById(p.id)
+      setForm({
+        name: detail.name,
+        brandId: detail.brand?.id ?? '',
+        price: detail.price,
+        categoryId: detail.category?.id ?? '',
+        gender: detail.gender ?? '',
+        description: detail.description || '',
+        imageUrl: detail.imageUrl || '',
+      })
+      setSizes(detail.sizes?.map(s => ({ id: s.id, eu: String(s.eu), stock: s.stock })) || [])
+    } catch {}
     try {
       const { data } = await adminService.getProductImages(p.id)
       setImages(data || [])
-    } catch { setImages([]) }
-    setModalOpen(true)
+    } catch {}
   }
 
   const handleAddSize = () => {
-    const eu = Number(newSize.eu)
+    const eu = String(newSize.eu)
     const stock = Number(newSize.stock)
     if (!eu || stock < 0) return
-    if (sizes.find(s => s.eu === eu)) return
+    if (sizes.find(s => String(s.eu) === eu)) return
     setSizes(prev => [...prev, { eu, stock, _tempId: Date.now() }])
     setNewSize({ eu: '', stock: '' })
   }
 
   const handleRemoveSize = (eu) => {
-    setSizes(prev => prev.filter(s => s.eu !== eu))
+    setSizes(prev => prev.filter(s => String(s.eu) !== String(eu)))
   }
 
   const handleAddImageUrl = () => {
@@ -135,7 +141,7 @@ export default function ProductsManagement() {
 
   const totalPages = Math.ceil(total / PER_PAGE)
 
-  const availableEuSizes = EU_SIZES.filter(eu => !sizes.find(s => s.eu === eu))
+  const availableEuSizes = EU_SIZES.filter(eu => !sizes.find(s => String(s.eu) === String(eu)))
 
   return (
     <div className="admin-products">
@@ -161,7 +167,7 @@ export default function ProductsManagement() {
                   <td>{Number(p.price).toFixed(2)} RSD</td>
                   <td>
                     <button className="admin-action-btn" onClick={() => openEdit(p)}>Uredi</button>
-                    <button className="admin-action-btn danger" onClick={() => setDeleteConfirm(p.id)}>Obrisi</button>
+                    <button className="admin-action-btn danger" onClick={() => setDeleteConfirm(p.id)}>Obriši</button>
                   </td>
                 </tr>
               ))}
@@ -264,7 +270,7 @@ export default function ProductsManagement() {
                     value={newSize.eu}
                     onChange={e => setNewSize(s => ({ ...s, eu: e.target.value }))}
                   >
-                    <option value="">EU velicina</option>
+                    <option value="">EU veličina</option>
                     {availableEuSizes.map(eu => <option key={eu} value={eu}>{eu}</option>)}
                   </select>
                   <input
@@ -272,7 +278,7 @@ export default function ProductsManagement() {
                     style={{ width: 90 }}
                     type="number"
                     min="0"
-                    placeholder="Kolicina"
+                    placeholder="Količina"
                     value={newSize.stock}
                     onChange={e => setNewSize(s => ({ ...s, stock: e.target.value }))}
                   />
@@ -309,8 +315,8 @@ export default function ProductsManagement() {
               </div>
 
               <div className="modal-actions">
-                <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'SNIMANJE...' : 'SACUVAJ'}</button>
-                <button type="button" className="btn-secondary" onClick={() => setModalOpen(false)}>OTKAZI</button>
+                <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'SNIMANJE...' : 'SAČUVAJ'}</button>
+                <button type="button" className="btn-secondary" onClick={() => setModalOpen(false)}>OTKAŽI</button>
               </div>
             </form>
           </div>
@@ -323,8 +329,8 @@ export default function ProductsManagement() {
             <h2 className="modal-title">POTVRDI BRISANJE</h2>
             <p style={{ fontSize: 13, color: 'var(--color-gray-text)', marginBottom: 'var(--space-4)' }}>Da li ste sigurni da zelite obrisati ovaj proizvod?</p>
             <div className="modal-actions">
-              <button className="btn-primary" style={{ background: 'var(--color-error)', borderColor: 'var(--color-error)' }} onClick={() => handleDelete(deleteConfirm)}>OBRISI</button>
-              <button className="btn-secondary" onClick={() => setDeleteConfirm(null)}>OTKAZI</button>
+              <button className="btn-primary" style={{ background: 'var(--color-error)', borderColor: 'var(--color-error)' }} onClick={() => handleDelete(deleteConfirm)}>OBRIŠI</button>
+              <button className="btn-secondary" onClick={() => setDeleteConfirm(null)}>OTKAŽI</button>
             </div>
           </div>
         </div>

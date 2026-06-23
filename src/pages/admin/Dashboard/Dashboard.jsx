@@ -27,7 +27,7 @@ export default function Dashboard() {
       <div className="stats-grid">
         {[
           { label: 'UKUPAN PRIHOD', value: stats ? `${Number(stats.totalRevenue || 0).toFixed(2)} RSD` : '—' },
-          { label: 'BROJ PORUDZINA', value: stats?.totalOrders ?? '—' },
+          { label: 'BROJ PORUDŽBINA', value: stats?.totalOrders ?? '—' },
           { label: 'BROJ KORISNIKA', value: stats?.totalUsers ?? '—' },
           { label: 'NOVI KORISNICI (MESEC)', value: stats?.newUsersThisMonth ?? '—' },
         ].map((s, i) => (
@@ -37,7 +37,7 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
-      <h2 className="admin-section-title">POSLED. 10 PORUDZINA</h2>
+      <h2 className="admin-section-title">POSLED. 10 PORUDŽBINA</h2>
       <div className="admin-table-wrap">
         <table className="admin-table">
           <thead>
@@ -45,7 +45,7 @@ export default function Dashboard() {
           </thead>
           <tbody>
             {recentOrders.length === 0 ? (
-              <tr><td colSpan={5} className="table-empty">Nema porudzina.</td></tr>
+              <tr><td colSpan={5} className="table-empty">Nema porudžbina.</td></tr>
             ) : recentOrders.map(o => (
               <tr key={o.id}>
                 <td>#{o.id}</td>

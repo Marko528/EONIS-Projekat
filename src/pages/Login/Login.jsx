@@ -57,7 +57,7 @@ export default function Login() {
           </div>
           {serverError && <p className="error-text server-error">{serverError}</p>}
           <button type="submit" className="btn-primary auth-submit" disabled={loading}>
-            {loading ? 'UCITAVANJE...' : 'PRIJAVA'}
+            {loading ? 'UČITAVANJE...' : 'PRIJAVA'}
           </button>
         </form>
         <p className="auth-switch">Nemate nalog? <Link to="/register">Registrujte se</Link></p>

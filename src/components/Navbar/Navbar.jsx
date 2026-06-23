@@ -131,9 +131,9 @@ export default function Navbar() {
         </div>
 
         <nav className="drawer-nav">
-          <Link to="/products?gender=Muski" onClick={close}>MUSKI</Link>
-          <Link to="/products?gender=Zenski" onClick={close}>ZENSKI</Link>
-          <Link to="/products" onClick={close}>BRENDOVI</Link>
+          <Link to="/products?gender=Muški" onClick={close}>MUŠKI</Link>
+          <Link to="/products?gender=Ženski" onClick={close}>ŽENSKI</Link>
+          <Link to="/brands" onClick={close}>BRENDOVI</Link>
           <Link to="/products?sort=newest" onClick={close}>NOVO</Link>
         </nav>
 
@@ -143,7 +143,7 @@ export default function Navbar() {
           {isAuthenticated ? (
             <>
               <Link to="/profile" onClick={close}>PROFIL</Link>
-              <Link to="/orders" onClick={close}>PORUDZINE</Link>
+              <Link to="/orders" onClick={close}>PORUDŽBINE</Link>
               <Link to="/wishlist" onClick={close}>WISHLIST</Link>
               {isAdmin && <Link to="/admin/dashboard" onClick={close}>ADMIN</Link>}
               <button onClick={handleLogout}>ODJAVA</button>
