@@ -27,7 +27,7 @@
 .accordion-body { padding: 0 0 var(--space-3); font-size: 13px; line-height: 1.7; color: var(--color-gray-text); }
 .accordion-body p { margin-bottom: 8px; }
 .reviews-section { padding-bottom: var(--space-12); }
-.reviews-title { font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: var(--space-6); }
+.reviews-title { padding-top: 40px; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: var(--space-6); }
 .review-form { margin-bottom: var(--space-8); max-width: 560px; }
 .review-rating { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); font-size: 13px; font-weight: 600; }
 .review-rating select { border: none; border-bottom: 1px solid var(--color-black); background: transparent; padding: 4px 0; font-family: var(--font-family); font-size: 13px; outline: none; cursor: pointer; }

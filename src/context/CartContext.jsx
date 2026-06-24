@@ -1,53 +1,66 @@
-﻿import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { useAuth } from './AuthContext'
+import { cartService } from '../services/cartService'
 
 const CartContext = createContext(null)
 
-const STORAGE_KEY = 'mkdr1p_cart'
-
 export function CartProvider({ children }) {
-  const [items, setItems] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      return stored ? JSON.parse(stored) : []
-    } catch { return [] }
-  })
+  const { isAuthenticated } = useAuth()
+  const [items, setItems] = useState([])
   const [isOpen, setIsOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-  }, [items])
+  const loadCart = useCallback(async () => {
+    if (!isAuthenticated) { setItems([]); return }
+    setLoading(true)
+    try {
+      const { data } = await cartService.getCart()
+      setItems(data)
+    } catch { setItems([]) }
+    finally { setLoading(false) }
+  }, [isAuthenticated])
 
-  const addToCart = (product) => {
-    setItems(prev => {
-      const existing = prev.find(
-        i => i.productId === product.productId && i.sizeId === product.sizeId
-      )
-      if (existing) {
-        return prev.map(i =>
-          i.productId === product.productId && i.sizeId === product.sizeId
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
-        )
-      }
-      return [...prev, { ...product, quantity: 1 }]
-    })
-    setIsOpen(true)
+  useEffect(() => { loadCart() }, [loadCart])
+
+  const addToCart = async (product) => {
+    if (!isAuthenticated) return
+    try {
+      const { data } = await cartService.addItem(product.productId, product.sizeId, 1)
+      setItems(prev => {
+        const existing = prev.find(i => i.id === data.id)
+        if (existing) return prev.map(i => i.id === data.id ? data : i)
+        return [...prev, data]
+      })
+      setIsOpen(true)
+    } catch (err) {
+      alert(err.response?.data?.message || 'Greška pri dodavanju u korpu.')
+    }
   }
 
-  const removeFromCart = (productId, sizeId) => {
-    setItems(prev => prev.filter(i => !(i.productId === productId && i.sizeId === sizeId)))
+  const removeFromCart = async (cartItemId) => {
+    if (!isAuthenticated) return
+    try {
+      await cartService.removeItem(cartItemId)
+      setItems(prev => prev.filter(i => i.id !== cartItemId))
+    } catch {}
   }
 
-  const updateQuantity = (productId, sizeId, quantity) => {
-    if (quantity <= 0) { removeFromCart(productId, sizeId); return }
-    setItems(prev =>
-      prev.map(i =>
-        i.productId === productId && i.sizeId === sizeId ? { ...i, quantity } : i
-      )
-    )
+  const updateQuantity = async (cartItemId, quantity) => {
+    if (!isAuthenticated) return
+    if (quantity <= 0) { removeFromCart(cartItemId); return }
+    try {
+      const { data } = await cartService.updateItem(cartItemId, quantity)
+      setItems(prev => prev.map(i => i.id === cartItemId ? data : i))
+    } catch {}
   }
 
-  const clearCart = () => setItems([])
+  const clearCart = async () => {
+    if (!isAuthenticated) { setItems([]); return }
+    try {
+      await cartService.clearCart()
+      setItems([])
+    } catch { setItems([]) }
+  }
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0)
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0)
@@ -55,7 +68,7 @@ export function CartProvider({ children }) {
   return (
     <CartContext.Provider value={{
       items, addToCart, removeFromCart, updateQuantity, clearCart,
-      totalItems, totalPrice, isOpen, setIsOpen
+      totalItems, totalPrice, isOpen, setIsOpen, loading, reloadCart: loadCart,
     }}>
       {children}
     </CartContext.Provider>

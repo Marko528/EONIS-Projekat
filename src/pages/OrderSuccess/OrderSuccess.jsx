@@ -21,7 +21,7 @@ export default function OrderSuccess() {
         </div>
         <h1>HVALA NA KUPOVINI!</h1>
         {orderId && <p className="order-number">Broj porudžbine: <strong>#{orderId}</strong></p>}
-        <p className="success-msg">Vaša porudžbina je uspješno primljena. Očekujte email potvrdu.</p>
+        <p className="success-msg">Vaša porudžbina je uspešno primljena. Očekujte email potvrdu.</p>
         <Link to="/products" className="btn-primary">NASTAVI SA KUPOVINOM</Link>
       </div>
     </div>

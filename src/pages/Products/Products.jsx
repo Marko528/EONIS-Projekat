@@ -69,6 +69,12 @@ export default function Products() {
     setPage(1)
   }, [searchParams.get('search')])
 
+  useEffect(() => {
+    const g = searchParams.get('gender') || ''
+    setFilters(f => ({ ...f, gender: g }))
+    setPage(1)
+  }, [searchParams.get('gender')])
+
   useEffect(() => { load() }, [load])
 
   const toggleBrand = (b) => setFilters(f => ({

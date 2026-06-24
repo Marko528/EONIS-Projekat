@@ -19,7 +19,7 @@ export default function CartDrawer() {
         price: i.price,
       }))
       const { data } = await orderService.create({ items: orderItems })
-      clearCart()
+      await clearCart()
       setIsOpen(false)
       if (data.stripeUrl) {
         window.location.href = data.stripeUrl
@@ -48,20 +48,20 @@ export default function CartDrawer() {
             <p className="cart-empty">Korpa je prazna.</p>
           ) : (
             items.map(item => (
-              <div key={`${item.productId}-${item.sizeId}`} className="cart-item">
+              <div key={item.id} className="cart-item">
                 <img src={item.imageUrl || 'https://placehold.co/80x107/F5F5F5/767676?text=MK'} alt={item.productName} />
                 <div className="cart-item-info">
                   <span className="cart-item-brand">{item.brandName}</span>
                   <span className="cart-item-name">{item.productName}</span>
-                  <span className="cart-item-size">Veličina: EU {item.sizeEU}</span>
+                  <span className="cart-item-size">Veličina: EU {item.sizeEu}</span>
                   <div className="cart-item-controls">
                     <div className="qty-controls">
-                      <button onClick={() => updateQuantity(item.productId, item.sizeId, item.quantity - 1)}>-</button>
+                      <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
                       <span>{item.quantity}</span>
-                      <button onClick={() => updateQuantity(item.productId, item.sizeId, item.quantity + 1)}>+</button>
+                      <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                     </div>
                     <span className="cart-item-price">{(item.price * item.quantity).toFixed(2)} RSD</span>
-                    <button className="cart-remove-btn" onClick={() => removeFromCart(item.productId, item.sizeId)}>
+                    <button className="cart-remove-btn" onClick={() => removeFromCart(item.id)}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                       </svg>

@@ -13,7 +13,7 @@ export default function Profile() {
     e.preventDefault()
     try {
       await authService.updateProfile(form)
-      setMsg('Podaci uspješno ažurirani!')
+      setMsg('Podaci uspešno ažurirani!')
     } catch { setMsg('Greška pri ažuriranju.') }
     setTimeout(() => setMsg(''), 3000)
   }

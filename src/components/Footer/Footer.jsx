@@ -28,6 +28,7 @@ export default function Footer() {
           <a href="#">Kontakt</a>
         </div>
       </div>
+      
       <div className="footer-bottom">
         <p>© {new Date().getFullYear()} MK DR1P. Sva prava zadrzana.</p>
       </div>
